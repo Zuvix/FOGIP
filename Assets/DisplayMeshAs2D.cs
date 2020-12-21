@@ -48,14 +48,43 @@ public class DisplayMeshAs2D : MonoBehaviour
         }
         //move the simple screen offset
         screenOffset += Vector3.right * 4;
-        //set the text under the rendered object to be equal to the name of the model
-        drawerInstance.GetComponentInChildren<TMP_Text>().text = selectedGO.name;
+    }
+    public void DrawNewMesh(GameObject selectedGO)
+    {
+        Mesh mesh = selectedGO.GetComponentInChildren<MeshFilter>().sharedMesh;
+        GameObject createdMesh = new GameObject(selectedGO.name);
+        createdMesh.transform.position += screenOffset;
+        List<Vector3> vertices = new List<Vector3>();
+        mesh.GetVertices(vertices);
+        int[] triangles = mesh.triangles;
+        //set the number of points we use to generate lines
+        for (int i = 0; i < triangles.Length; i+=3)
+        {
+            GameObject drawerInstance = Instantiate(drawingGO,createdMesh.transform);
+            LineRenderer lr = drawerInstance.GetComponent<LineRenderer>();
+            lr.positionCount = 3;
+
+            Vector3 pointToAdd = vertices[triangles[i]];
+            pointToAdd.z = 0;
+            lr.SetPosition(0, pointToAdd);
+
+            pointToAdd = vertices[triangles[i+1]];
+            pointToAdd.z = 0;
+            lr.SetPosition(1, pointToAdd);
+
+            pointToAdd = vertices[triangles[i + 2]];
+            pointToAdd.z = 0;
+            lr.SetPosition(2, pointToAdd);
+
+        }
+        screenOffset += Vector3.right * 4;
+
     }
     //run our code
     private void Start()
     {
-        DrawMesh(sphere);
-        DrawMesh(rabbit);
-        DrawMesh(monkey);
+        //DrawNewMesh(sphere);
+        //DrawMesh(rabbit);
+        DrawNewMesh(monkey);
     }
 }
