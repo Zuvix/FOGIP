@@ -22,6 +22,6 @@ After model is displayed a user can use use Scale, Rotation and Translation opti
 Model after performing Translate, Scale and Rotate Transformations.
 ![alt text](https://github.com/Zuvix/Fogip/blob/main/4.png?raw=true)
 
-# Downloading the build
+# Download
 There is a zipped file containing the build of an application. Simply download, unzip and run the Display Mesh.exe file.
 
