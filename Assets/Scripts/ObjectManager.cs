@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class ObjectManager : Singleton<ObjectManager>
 {
-    private List<int> indices;
-    private List<Vect4> vertices;
-    public ModelVisual modelVisual;  
+    private List<int> loadedIndices;
+    private List<Vect4> loadedVertices;
+    public ModelVisual modelVisual;
+    public UiControl UiControl;
     public void UpdateModel(string path, string name)
     {
-        FileManager.RetriveModelData(path,out vertices,out indices);
-        modelVisual.DrawMesh(name,vertices, indices);
+        FileManager.RetriveModelData(path,out loadedVertices, out loadedIndices);
+        modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
+    }
+    public void ResetModel()
+    {
+        modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
+    }
+    public void Translate()
+    {
+        Vect4 translationVector = UiControl.GetTranslationVector();
+        modelVisual.ApplyTranslation(translationVector);
     }
 
 }

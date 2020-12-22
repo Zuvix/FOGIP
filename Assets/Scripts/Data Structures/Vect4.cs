@@ -30,12 +30,20 @@ public class Vect4
             this.x = float.Parse(x, System.Globalization.CultureInfo.InvariantCulture);
             this.y = float.Parse(y, System.Globalization.CultureInfo.InvariantCulture);
             this.z = float.Parse(z, System.Globalization.CultureInfo.InvariantCulture);
+            this.w = 1;
         }
         catch (FormatException)
         {
             Debug.LogError("string to vect4 failded, invalid arguments: "+x+" "+y+ " " + z);
         }
 
+    }
+    public Vect4(Vector3 unityVector)
+    {
+        this.x = unityVector.x;
+        this.y = unityVector.y;
+        this.z = unityVector.z;
+        this.w = 1;
     }
 
 }
