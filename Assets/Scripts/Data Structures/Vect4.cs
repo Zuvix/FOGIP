@@ -14,7 +14,7 @@ public class Vect4
         this.x = x;
         this.y = y;
         this.z = z;
-        this.w = 0;
+        this.w = 1;
     }
     public Vect4(float x, float y, float z, float w)
     {
