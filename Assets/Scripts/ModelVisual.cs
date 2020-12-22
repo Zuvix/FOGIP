@@ -37,10 +37,8 @@ public class ModelVisual : MonoBehaviour
             drawedTriangles.Add(new IndexedFace(i / 3,lr, p1, p2, p3));
         }
     }
-    public void ApplyTranslation(Vect4 translationVector)
+    public void ApplyTransformation(Mat4 transformationMatrix)
     {
-        //Create matrix
-        Mat4 transformationMatrix = new Mat4(MatType.translation, translationVector);
         foreach (IndexedFace triangle in drawedTriangles)
         {
             Vect4[] points = triangle.GetPoints();

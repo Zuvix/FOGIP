@@ -27,14 +27,35 @@ public class Vect4
     {
         try
         {
-            this.x = float.Parse(x, System.Globalization.CultureInfo.InvariantCulture);
-            this.y = float.Parse(y, System.Globalization.CultureInfo.InvariantCulture);
-            this.z = float.Parse(z, System.Globalization.CultureInfo.InvariantCulture);
+            if (x.Length > 0)
+            {
+                this.x = float.Parse(x.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                this.x = 0;
+            }
+            if (y.Length > 0)
+            {
+                this.y = float.Parse(y.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                this.y = 0;
+            }
+            if (z.Length > 0)
+            {
+                this.z = float.Parse(z.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                this.z = 0;
+            }
             this.w = 1;
         }
         catch (FormatException)
         {
-            Debug.LogError("string to vect4 failded, invalid arguments: "+x+" "+y+ " " + z);
+            Debug.LogError("string to vect4 failded, invalid arguments: "+x+" "+y+ " " +z);
         }
 
     }

@@ -20,7 +20,26 @@ public class ObjectManager : Singleton<ObjectManager>
     public void Translate()
     {
         Vect4 translationVector = UiControl.GetTranslationVector();
-        modelVisual.ApplyTranslation(translationVector);
+        Mat4 translationMatrix = new Mat4(MatType.translation, translationVector);
+        modelVisual.ApplyTransformation(translationMatrix);
+    }
+    public void Scale()
+    {
+        Vect4 scalingVector = UiControl.GetScalingVector();
+        Mat4 scalingMatrix = new Mat4(MatType.scale, scalingVector);
+        modelVisual.ApplyTransformation(scalingMatrix);
+    }
+    public void Rotate()
+    {
+        Vect4 rotationVector = UiControl.GetRotationVector();
+        Mat4 rotxMatrix = new Mat4(MatType.rotx,rotationVector.x);
+        modelVisual.ApplyTransformation(rotxMatrix);
+
+        Mat4 rotyMatrix = new Mat4(MatType.roty, rotationVector.y);
+        modelVisual.ApplyTransformation(rotyMatrix);
+
+        Mat4 rotzMatrix = new Mat4(MatType.rotz, rotationVector.z);
+        modelVisual.ApplyTransformation(rotzMatrix);
     }
 
 }
