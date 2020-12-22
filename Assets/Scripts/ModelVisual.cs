@@ -7,18 +7,17 @@ public class ModelVisual : MonoBehaviour
     [SerializeField]
     private GameObject drawingGO;
     [SerializeField]
-    private Vector3 screenOffset;
     public GameObject activeModel;
-    List<IndexedFace> drawedTriangles;
-    public void DrawMesh(string name,List<Vect4> vertices, List<int> indices)
+    //we store a list of drawed faces so we can modify them during runtime
+    private List<IndexedFace> drawedFaces;
+    public void DrawMesh(string name,List<Vect4> vertices, List<int> indices,Mat4 projectionMatrix)
     {
         if (activeModel != null)
         {
             Destroy(activeModel);
-            drawedTriangles = new List<IndexedFace>();
+            drawedFaces = new List<IndexedFace>();
         }
-        activeModel = new GameObject("Model");
-        activeModel.transform.position += screenOffset;
+        activeModel = new GameObject(name);
         for (int i = 0; i < indices.Count; i += 3)
         {
             GameObject drawerInstance = Instantiate(drawingGO, activeModel.transform);
@@ -34,20 +33,47 @@ public class ModelVisual : MonoBehaviour
 
             Vect4 p3 = vertices[indices[i + 2]-1];
             lr.SetPosition(2, new Vector3(p3.x, p3.y, 0));
-            drawedTriangles.Add(new IndexedFace(i / 3,lr, p1, p2, p3));
+            
+            //We might need the indices later when searching for neighbours
+            int[] pointIndices = new int[3];
+            pointIndices[0] = indices[i] - 1;
+            pointIndices[1] = indices[i + 1] - 1;
+            pointIndices[2] = indices[i + 2] - 1;
+            //Add to our array of faces
+            drawedFaces.Add(new IndexedFace(lr, p1, p2, p3, pointIndices));
         }
+        //We apply this transformation just to get the object to view
+        ApplyTransformation(new Mat4(MatType.identity), projectionMatrix,false);
     }
-    public void ApplyTransformation(Mat4 transformationMatrix)
+
+    public void ApplyTransformation(Mat4 transformationMatrix, Mat4 projectionMatrix, bool shouldAnimate)
     {
-        foreach (IndexedFace triangle in drawedTriangles)
+        foreach (IndexedFace face in drawedFaces)
         {
-            Vect4[] points = triangle.GetPoints();
+            //get the local points of one face
+            Vect4[] points = face.GetLocalPoints();
             for(int i=0;i<3;i++)
             {
-                Vect4 translatedPoint = transformationMatrix.Multiply(points[i]);
-                triangle.UpdatePoint(i, translatedPoint);
+                //apply transformation to local point
+                Vect4 LocalPoint = transformationMatrix.Multiply(points[i]);
+
+                //update the local point
+                face.UpdateLocalPoint(i, LocalPoint);
+
+                //multipli by projection matrix
+                Vect4 FinalPoint = projectionMatrix.Multiply(LocalPoint);
+                face.UpdateFinalPoint(i, FinalPoint);
             }
-            triangle.UpdateLine();
+            //simply display or animate the object
+            if (shouldAnimate)
+            {
+                face.TweenLines();
+            }
+            else
+            {
+                face.UpdateLines();
+            }
         }
+
     }
 }

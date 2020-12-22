@@ -59,12 +59,4 @@ public class Vect4
         }
 
     }
-    public Vect4(Vector3 unityVector)
-    {
-        this.x = unityVector.x;
-        this.y = unityVector.y;
-        this.z = unityVector.z;
-        this.w = 1;
-    }
-
 }

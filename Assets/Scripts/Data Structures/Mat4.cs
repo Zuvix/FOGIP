@@ -15,7 +15,10 @@ public enum MatType
 
 public class Mat4
 {
+    //Members of array
     public float[,] members=new float[4,4];
+
+    //Various constructors
     public Mat4(MatType type)
     {
         InitializeArray();
@@ -110,15 +113,9 @@ public class Mat4
                 }
             }
         }
-        /*for (int i = 0; i < 4; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                Debug.Log(result.members[i, j]);
-            }
-        }*/
         return result;
     }
+
     public Vect4 Multiply(Vect4 other)
     {
         Vect4 result = new Vect4(0, 0, 0);
@@ -136,9 +133,9 @@ public class Mat4
         result.y = tempResult[1];
         result.z = tempResult[2];
         result.w = tempResult[3];
-        //Debug.Log(result.x + " " + result.y + " " + result.z + " " + result.w);
         return result;
     }
+
     public void InitializeArray()
     {
         members = new float[4, 4];
