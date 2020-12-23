@@ -59,12 +59,8 @@ public class ModelVisual : MonoBehaviour
             {
                 //apply transformation to current point
                 Vect4 CurrentPoint = transformationMatrix.Multiply(points[i]);
-
                 //update the current point
                 face.UpdateLocalPoint(i, CurrentPoint);
-                //multiply by projection matrix
-                Vect4 FinalPoint = projectionMatrix.Multiply(CurrentPoint);
-                face.UpdateFinalPoint(i, FinalPoint);
             }
         }
         //Now we move object back to local point
@@ -89,8 +85,6 @@ public class ModelVisual : MonoBehaviour
                 face.UpdateLines();
             }
         }
-        
-
     }
     public void TranslateToGlobalCenter()
     {
