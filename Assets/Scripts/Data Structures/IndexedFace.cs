@@ -6,7 +6,7 @@ public class IndexedFace
 {
 
     private int[] indices;
-    public Vect4[] localPoints = new Vect4[3];
+    public Vect4[] currentPoints = new Vect4[3];
     
     //used for animation and visualisation of faces
     //final meaning after multiplying with projection matrix
@@ -16,9 +16,9 @@ public class IndexedFace
     {
 
         this.lr = lr;
-        this.localPoints[0] = p1;
-        this.localPoints[1] = p2;
-        this.localPoints[2] = p3;
+        this.currentPoints[0] = p1;
+        this.currentPoints[1] = p2;
+        this.currentPoints[2] = p3;
     }
     //Display the face on screen
     public void UpdateLines()
@@ -44,10 +44,10 @@ public class IndexedFace
     //Update local point
     public void UpdateLocalPoint(int index, Vect4 point)
     {
-        localPoints[index] = point;
+        currentPoints[index] = point;
     }
     public Vect4[] GetCurrentPoints()
     {
-        return localPoints;
+        return currentPoints;
     }
 }

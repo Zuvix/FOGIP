@@ -49,23 +49,25 @@ public class ModelVisual : MonoBehaviour
 
     public void ApplyTransformation(Mat4 transformationMatrix, Mat4 projectionMatrix, bool shouldAnimate)
     {
+        //First we move object to global center 0,0,0
         TranslateToGlobalCenter();
-        //Perform transformation
+        //Then we Perform transformation
         foreach (IndexedFace face in drawedFaces)
         {
             Vect4[] points = face.GetCurrentPoints();
             for (int i = 0; i < 3; i++)
             {
-                //apply transformation to local point
-                Vect4 LocalPoint = transformationMatrix.Multiply(points[i]);
+                //apply transformation to current point
+                Vect4 CurrentPoint = transformationMatrix.Multiply(points[i]);
 
                 //update the current point
-                face.UpdateLocalPoint(i, LocalPoint);
+                face.UpdateLocalPoint(i, CurrentPoint);
                 //multiply by projection matrix
-                Vect4 FinalPoint = projectionMatrix.Multiply(LocalPoint);
+                Vect4 FinalPoint = projectionMatrix.Multiply(CurrentPoint);
                 face.UpdateFinalPoint(i, FinalPoint);
             }
         }
+        //Now we move object back to local point
         TranslateToLocalCenter();
         //Transform into view
         foreach (IndexedFace face in drawedFaces)
@@ -77,7 +79,7 @@ public class ModelVisual : MonoBehaviour
                 Vect4 FinalPoint = projectionMatrix.Multiply(points[i]);
                 face.UpdateFinalPoint(i, FinalPoint);
             }
-            //simply display or animate the object
+            //simply display object or animate the transformation
             if (shouldAnimate)
             {
                 face.TweenLines();
