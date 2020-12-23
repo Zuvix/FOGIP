@@ -38,5 +38,5 @@ Model after performing Translate, Scale and Rotate Transformations.
 
 
 # Download
-There is a zipped file containing the build of an application. Simply download, unzip and run the Display Mesh.exe file.
+There is a zipped file containing the build of an application. Simply download, unzip and run the VisualiseObjects.exe file.
 
