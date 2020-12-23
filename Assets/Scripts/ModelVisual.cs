@@ -88,7 +88,7 @@ public class ModelVisual : MonoBehaviour
     }
     public void TranslateToGlobalCenter()
     {
-        if(localCenter.x!=0 || localCenter.y!=0 || localCenter.z == 0)
+        if(localCenter.x!=0 || localCenter.y!=0 || localCenter.z != 0)
         {
             Debug.Log("Moving to global center");
             Mat4 translationMatrix = new Mat4(MatType.translation, localCenter.Invert());
@@ -113,7 +113,7 @@ public class ModelVisual : MonoBehaviour
 
     public void TranslateToLocalCenter()
     {
-        if (localCenter.x != 0 || localCenter.y != 0 || localCenter.z == 0)
+        if (localCenter.x != 0 || localCenter.y != 0 || localCenter.z != 0)
         {
             Debug.Log("Moving to local center");
             Mat4 translationMatrix = new Mat4(MatType.translation, localCenter);
