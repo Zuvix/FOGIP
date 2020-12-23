@@ -59,4 +59,20 @@ public class Vect4
         }
 
     }
+    public Vect4 Addition(Vect4 toAddVect)
+    {
+        Vect4 result = new Vect4(this.x, this.y, this.z);
+        result.x += toAddVect.x;
+        result.y += toAddVect.y;
+        result.z += toAddVect.z;
+        return result;
+    }
+    public Vect4 Invert()
+    {
+        Vect4 result = new Vect4(this.x, this.y, this.z);
+        result.x *= -1;
+        result.y *= -1;
+        result.z *= -1;
+        return result;
+    }
 }

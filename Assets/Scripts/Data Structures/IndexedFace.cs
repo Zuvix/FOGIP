@@ -46,7 +46,7 @@ public class IndexedFace
     {
         localPoints[index] = point;
     }
-    public Vect4[] GetLocalPoints()
+    public Vect4[] GetCurrentPoints()
     {
         return localPoints;
     }

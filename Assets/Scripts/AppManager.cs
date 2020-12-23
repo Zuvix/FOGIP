@@ -34,6 +34,7 @@ public class AppManager : Singleton<AppManager>
         Vect4 translationVector = UiControl.GetTranslationVector();
         Mat4 translationMatrix = new Mat4(MatType.translation, translationVector);
         modelVisual.ApplyTransformation(translationMatrix,projectionMatrix,true);
+        modelVisual.ChangeLocalCenter(translationVector);
     }
 
     public void Scale()

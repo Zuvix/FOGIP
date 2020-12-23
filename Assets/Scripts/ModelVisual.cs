@@ -10,6 +10,7 @@ public class ModelVisual : MonoBehaviour
     public GameObject activeModel;
     //we store a list of drawed faces so we can modify them during runtime
     private List<IndexedFace> drawedFaces;
+    private Vect4 localCenter=new Vect4(0,0,0);
     public void DrawMesh(string name,List<Vect4> vertices, List<int> indices,Mat4 projectionMatrix)
     {
         if (activeModel != null)
@@ -48,20 +49,32 @@ public class ModelVisual : MonoBehaviour
 
     public void ApplyTransformation(Mat4 transformationMatrix, Mat4 projectionMatrix, bool shouldAnimate)
     {
+        TranslateToGlobalCenter();
+        //Perform transformation
         foreach (IndexedFace face in drawedFaces)
         {
-            //get the local points of one face
-            Vect4[] points = face.GetLocalPoints();
-            for(int i=0;i<3;i++)
+            Vect4[] points = face.GetCurrentPoints();
+            for (int i = 0; i < 3; i++)
             {
                 //apply transformation to local point
                 Vect4 LocalPoint = transformationMatrix.Multiply(points[i]);
 
-                //update the local point
+                //update the current point
                 face.UpdateLocalPoint(i, LocalPoint);
-
-                //multipli by projection matrix
+                //multiply by projection matrix
                 Vect4 FinalPoint = projectionMatrix.Multiply(LocalPoint);
+                face.UpdateFinalPoint(i, FinalPoint);
+            }
+        }
+        TranslateToLocalCenter();
+        //Transform into view
+        foreach (IndexedFace face in drawedFaces)
+        {
+            Vect4[] points = face.GetCurrentPoints();
+            for (int i = 0; i < 3; i++)
+            {
+                //Transform to projection matrix
+                Vect4 FinalPoint = projectionMatrix.Multiply(points[i]);
                 face.UpdateFinalPoint(i, FinalPoint);
             }
             //simply display or animate the object
@@ -74,6 +87,59 @@ public class ModelVisual : MonoBehaviour
                 face.UpdateLines();
             }
         }
+        
 
+    }
+    public void TranslateToGlobalCenter()
+    {
+        if(localCenter.x!=0 || localCenter.y!=0 || localCenter.z == 0)
+        {
+            Debug.Log("Moving to global center");
+            Mat4 translationMatrix = new Mat4(MatType.translation, localCenter.Invert());
+            foreach (IndexedFace face in drawedFaces)
+            {
+                //get the local points of one face
+                Vect4[] points = face.GetCurrentPoints();
+                for (int i = 0; i < 3; i++)
+                {
+                    //move point to globalCenter
+
+                    //apply transformation to current point
+                    Vect4 CurrentPoint = translationMatrix.Multiply(points[i]);
+
+                    //update the current point
+                    face.UpdateLocalPoint(i, CurrentPoint);
+                }
+            }
+        }
+        
+    }
+
+    public void TranslateToLocalCenter()
+    {
+        if (localCenter.x != 0 || localCenter.y != 0 || localCenter.z == 0)
+        {
+            Debug.Log("Moving to local center");
+            Mat4 translationMatrix = new Mat4(MatType.translation, localCenter);
+            foreach (IndexedFace face in drawedFaces)
+            {
+                //get the local points of one face
+                Vect4[] points = face.GetCurrentPoints();
+                for (int i = 0; i < 3; i++)
+                {
+                    //move point to globalCenter
+
+                    //apply transformation to current point
+                    Vect4 CurrentPoint = translationMatrix.Multiply(points[i]);
+
+                    //update the current point
+                    face.UpdateLocalPoint(i, CurrentPoint);
+                }
+            }
+        }
+    }
+    public void ChangeLocalCenter(Vect4 translation)
+    {
+        localCenter = localCenter.Addition(translation);
     }
 }
