@@ -41,7 +41,7 @@ public class ModelVisual : MonoBehaviour
             pointIndices[1] = indices[i + 1] - 1;
             pointIndices[2] = indices[i + 2] - 1;
             //Add to our array of faces
-            drawedFaces.Add(new IndexedFace(lr, p1, p2, p3, pointIndices));
+            drawedFaces.Add(new IndexedFace(lr, p1, p2, p3));
         }
         //We apply this transformation just to get the object to view
         ApplyTransformation(new Mat4(MatType.identity), projectionMatrix,false);

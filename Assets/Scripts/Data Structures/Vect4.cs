@@ -75,4 +75,22 @@ public class Vect4
         result.z *= -1;
         return result;
     }
+    public Vect4 Normalize()
+    {
+        float mag = Magnitude();
+        Vect4 result = new Vect4(this.x/mag, this.y/mag, this.z/mag);
+        return result;
+
+    }
+    public float Magnitude()
+    {
+        float result = 0;
+        result = Mathf.Sqrt(x * x + y * y + z * z);
+        return result;
+    }
+    public Vector3 Convert()
+    {
+        Vector3 result = new Vector3(this.x, this.y, this.z);
+        return result;
+    }
 }

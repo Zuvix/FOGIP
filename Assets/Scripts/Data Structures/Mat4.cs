@@ -38,7 +38,7 @@ public class Mat4
     public Mat4(MatType type, Vect4 change)
     {
         InitializeArray();
-        switch (type)
+        switch (type) 
         {
             case MatType.scale:
                 {

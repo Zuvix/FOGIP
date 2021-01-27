@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-public class IndexedFace
+public class IndexedFace: MonoBehaviour
 {
-
-    private int[] indices;
+    Mesh mesh;
+    //private int[] indices;
     public Vect4[] currentPoints = new Vect4[3];
     
     //used for animation and visualisation of faces
     //final meaning after multiplying with projection matrix
     private Vect4[] finalPoints = new Vect4[3];
     private LineRenderer lr;
-    public IndexedFace(LineRenderer lr, Vect4 p1, Vect4 p2, Vect4 p3, int[] indices)
+    public IndexedFace(LineRenderer lr, Vect4 p1, Vect4 p2, Vect4 p3)
     {
-
         this.lr = lr;
         this.currentPoints[0] = p1;
         this.currentPoints[1] = p2;
