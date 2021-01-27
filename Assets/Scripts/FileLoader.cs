@@ -31,7 +31,7 @@ public class FileLoader : MonoBehaviour
 
         if (FileBrowser.Success)
         {
-            AppManager.Instance.UpdateModel(FileBrowser.Result,FileBrowserHelpers.GetFilename(FileBrowser.Result).Replace(".obj", ""));
+            IndexedFace.Instance.UpdateModel(FileBrowser.Result,FileBrowserHelpers.GetFilename(FileBrowser.Result).Replace(".obj", ""));
         }
     }
 }

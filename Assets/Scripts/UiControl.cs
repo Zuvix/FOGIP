@@ -49,31 +49,31 @@ public class UiControl : MonoBehaviour
     }
     public void SetLightPosition()
     {
-        AppManager.Instance.light = new Vect4(lxTxt.text, lyTxt.text, lzTxt.text).Normalize();
-        AppManager.Instance.Redraw();
+        IndexedFace.Instance.light = new Vect4(lxTxt.text, lyTxt.text, lzTxt.text).Normalize();
+        IndexedFace.Instance.Redraw();
     }
     public void SetLightProperties()
     {
         if (kaTxt.text.Length > 0)
-            AppManager.Instance.ka = float.Parse(kaTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            IndexedFace.Instance.ka = float.Parse(kaTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
         else
-            AppManager.Instance.ka = 0;
+            IndexedFace.Instance.ka = 0;
 
         if (kdTxt.text.Length > 0)
-            AppManager.Instance.kd = float.Parse(kdTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            IndexedFace.Instance.kd = float.Parse(kdTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
         else
-            AppManager.Instance.kd = 0;
+            IndexedFace.Instance.kd = 0;
 
         if (ksTxt.text.Length > 0)
-            AppManager.Instance.ks = float.Parse(ksTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            IndexedFace.Instance.ks = float.Parse(ksTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
         else
-            AppManager.Instance.ks = 0;
+            IndexedFace.Instance.ks = 0;
 
         if (hTxt.text.Length > 0)
-            AppManager.Instance.h = float.Parse(hTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+            IndexedFace.Instance.h = float.Parse(hTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
         else
-            AppManager.Instance.h = 0;
-        AppManager.Instance.Redraw();
+            IndexedFace.Instance.h = 0;
+        IndexedFace.Instance.Redraw();
 
     }
      public void ChangeColor()
@@ -81,33 +81,33 @@ public class UiControl : MonoBehaviour
         int val = colorSeter.value;
         if(val== 0)
         {
-            AppManager.Instance.materialColor = Color.grey;
+            IndexedFace.Instance.materialColor = Color.grey;
         }
         if (val == 1)
         {
-            AppManager.Instance.materialColor = Color.red;
+            IndexedFace.Instance.materialColor = Color.red;
         }
         if (val == 2)
         {
-            AppManager.Instance.materialColor = Color.blue;
+            IndexedFace.Instance.materialColor = Color.blue;
         }
         if (val == 3)
         {
-            AppManager.Instance.materialColor = Color.green;
+            IndexedFace.Instance.materialColor = Color.green;
         }
     }
     public void SwitchLightModel()
     {
-        if (AppManager.Instance.lightType.Equals("Blinn"))
+        if (IndexedFace.Instance.lightType.Equals("Blinn"))
         {
-            AppManager.Instance.lightType = "Phong";
+            IndexedFace.Instance.lightType = "Phong";
             modelName.text = "Phong model";
         }
         else
         {
-            AppManager.Instance.lightType = "Blinn";
+            IndexedFace.Instance.lightType = "Blinn";
             modelName.text = "Blinn-Phong";
         }
-        AppManager.Instance.Redraw();
+        IndexedFace.Instance.Redraw();
     }
 }

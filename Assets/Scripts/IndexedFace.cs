@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AppManager : Singleton<AppManager>
+public class IndexedFace : Singleton<IndexedFace>
 {
     private List<int> loadedIndices;
     private List<Vect4> loadedVertices;

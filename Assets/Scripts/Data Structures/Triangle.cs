@@ -4,14 +4,10 @@ using UnityEngine;
 using DG.Tweening;
 public class Triangle: MonoBehaviour
 {
+    //We need to use Unity mesh in order to draw the triangle
     Mesh mesh;
     MeshRenderer mr;
-    public Vect4[] currentPoints = new Vect4[3];
-    
-    //used for animation and visualisation of faces
-    //final meaning after multiplying with projection matrix
-    private Vect4[] finalPoints = new Vect4[3];
-    private LineRenderer lr;
+    private Vect4[] vertices = new Vect4[3];
     Vect4 normal;
 
     public Triangle CreateTriangle(Vect4 p1, Vect4 p2, Vect4 p3)
@@ -19,9 +15,9 @@ public class Triangle: MonoBehaviour
         mesh = GetComponent<MeshFilter>().mesh;
         mr = GetComponent<MeshRenderer>();
         mesh.Clear();
-        this.currentPoints[0] = p1;
-        this.currentPoints[1] = p2;
-        this.currentPoints[2] = p3;
+        this.vertices[0] = p1;
+        this.vertices[1] = p2;
+        this.vertices[2] = p3;
         mesh.vertices = new Vector3[] { p1.Convert(), p2.Convert(), p3.Convert() };
         mesh.triangles = new int[] { 0, 1, 2 };
         //BackFaceCulling(finalPoints[0], finalPoints[1],finalPoints[2]);
@@ -32,18 +28,18 @@ public class Triangle: MonoBehaviour
     public void RedrawTriangle()
     {
         mesh.Clear();
-        mesh.vertices = new Vector3[] { new Vector3(finalPoints[0].x, finalPoints[0].y, finalPoints[0].z), new Vector3(finalPoints[1].x, finalPoints[1].y, finalPoints[1].z), new Vector3(finalPoints[2].x, finalPoints[2].y, finalPoints[2].z) };
+        mesh.vertices = new Vector3[] { new Vector3(vertices[0].x, vertices[0].y, vertices[0].z), new Vector3(vertices[1].x, vertices[1].y, vertices[1].z), new Vector3(vertices[2].x, vertices[2].y, vertices[2].z) };
         mesh.triangles = new int[] { 0, 1, 2 };
         mr.enabled = true;
-        CalculateNormal(finalPoints[0], finalPoints[1], finalPoints[2]);
+        CalculateNormal(vertices[0], vertices[1], vertices[2]);
         BackFaceCulling(normal, new Vect4(0, 0, 1));
-        if (AppManager.Instance.lightType.Equals("Blinn"))
+        if (IndexedFace.Instance.lightType.Equals("Blinn"))
         {
-            CalculateBlinnPhongLight(AppManager.Instance.light, new Vect4(0, 0, -1), AppManager.Instance.ka, AppManager.Instance.kd, AppManager.Instance.ks, AppManager.Instance.h);
+            CalculateBlinnPhongLight(IndexedFace.Instance.light, new Vect4(0, 0, -1), IndexedFace.Instance.ka, IndexedFace.Instance.kd, IndexedFace.Instance.ks, IndexedFace.Instance.h);
         }
         else
         {
-            CalculatePhongLight(AppManager.Instance.light, new Vect4(0, 0, -1), AppManager.Instance.ka, AppManager.Instance.kd, AppManager.Instance.ks, AppManager.Instance.h);
+            CalculatePhongLight(IndexedFace.Instance.light, new Vect4(0, 0, -1), IndexedFace.Instance.ka, IndexedFace.Instance.kd, IndexedFace.Instance.ks, IndexedFace.Instance.h);
         }
     }
     public void CalculateNormal(Vect4 p1, Vect4 p2, Vect4 p3)
@@ -70,7 +66,7 @@ public class Triangle: MonoBehaviour
             H.Normalize();
             float Is = ks*Mathf.Pow(H.DotProduct(H, normal),h); 
             float I = Ia+Id+Is;
-            mr.material.SetColor("_Color", AppManager.Instance.materialColor * I);
+            mr.material.SetColor("_Color", IndexedFace.Instance.materialColor * I);
         }
     }
 
@@ -89,20 +85,20 @@ public class Triangle: MonoBehaviour
             R.Normalize();
             float Is = ks * Mathf.Pow(R.DotProduct(R, view), h);
             float I = Ia + Id + Is;
-            mr.material.SetColor("_Color", AppManager.Instance.materialColor * I);
+            mr.material.SetColor("_Color", IndexedFace.Instance.materialColor * I);
         }
     }
     public void UpdateFinalPoint(int index, Vect4 point)
     {
-        finalPoints[index] = point;
+        vertices[index] = point;
     }
     //Update local point
     public void UpdateLocalPoint(int index, Vect4 point)
     {
-        currentPoints[index] = point;
+        vertices[index] = point;
     }
     public Vect4[] GetCurrentPoints()
     {
-        return currentPoints;
+        return vertices;
     }
 }
