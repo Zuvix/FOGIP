@@ -6,7 +6,7 @@ public class AppManager : Singleton<AppManager>
 {
     private List<int> loadedIndices;
     private List<Vect4> loadedVertices;
-    private List<IndexedFace> indexedFaces;
+    private List<Triangle> indexedFaces;
     public ModelVisual modelVisual;
     public UiControl UiControl;
     public Mat4 projectionMatrix;

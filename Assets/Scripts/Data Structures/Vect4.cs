@@ -67,6 +67,14 @@ public class Vect4
         result.z += toAddVect.z;
         return result;
     }
+    public Vect4 Substraction(Vect4 toSubVect)
+    {
+        Vect4 result = new Vect4(this.x, this.y, this.z);
+        result.x -= toSubVect.x;
+        result.y -= toSubVect.y;
+        result.z -= toSubVect.z;
+        return result;
+    }
     public Vect4 Invert()
     {
         Vect4 result = new Vect4(this.x, this.y, this.z);
@@ -74,6 +82,19 @@ public class Vect4
         result.y *= -1;
         result.z *= -1;
         return result;
+    }
+    public float DotProduct(Vect4 v1, Vect4 v2)
+    {
+        float result = 0;
+        result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+        return result;
+    }
+    public Vect4 CrossProduct(Vect4 v1, Vect4 v2)
+    {
+        float x = v1.y * v2.z - v2.y * v1.z;
+        float y = (v1.x * v2.z - v2.x * v1.z) * -1;
+        float z = v1.x * v2.y - v2.x * v1.y;
+        return new Vect4(x, y, z);
     }
     public Vect4 Normalize()
     {
@@ -93,4 +114,6 @@ public class Vect4
         Vector3 result = new Vector3(this.x, this.y, this.z);
         return result;
     }
+
+
 }

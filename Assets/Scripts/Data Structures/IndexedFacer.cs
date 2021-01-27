@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class IndexedFacer : Singleton<IndexedFacer>
 {
+    public GameObject MeshPrefab;
     private List<int> loadedIndices;
     private List<Vect4> loadedVertices;
     public Vect4[] currentPoints = new Vect4[3];

@@ -8,40 +8,25 @@ public class ModelVisual : MonoBehaviour
     private GameObject drawingGO;
     [SerializeField]
     public GameObject activeModel;
-    //we store a list of drawed faces so we can modify them during runtime
-    private List<IndexedFace> drawedFaces;
+    public GameObject trianglePrefab;
+    //we store a list of drawed triangles so we can modify them during runtime
+    private List<Triangle> drawedTriangles;
     private Vect4 localCenter=new Vect4(0,0,0);
     public void DrawMesh(string name,List<Vect4> vertices, List<int> indices,Mat4 projectionMatrix)
     {
         if (activeModel != null)
         {
             Destroy(activeModel);
-            drawedFaces = new List<IndexedFace>();
+            drawedTriangles = new List<Triangle>();
         }
         activeModel = new GameObject(name);
         for (int i = 0; i < indices.Count; i += 3)
         {
-            GameObject drawerInstance = Instantiate(drawingGO, activeModel.transform);
-            LineRenderer lr = drawerInstance.GetComponent<LineRenderer>();
-            lr.positionCount = 4;
 
             Vect4 p1 = vertices[indices[i]-1];
-            lr.SetPosition(0, new Vector3(p1.x, p1.y, 0));
-            lr.SetPosition(3, new Vector3(p1.x, p1.y, 0));
-
             Vect4 p2 = vertices[indices[i + 1]-1];
-            lr.SetPosition(1, new Vector3(p2.x, p2.y, 0));
-
             Vect4 p3 = vertices[indices[i + 2]-1];
-            lr.SetPosition(2, new Vector3(p3.x, p3.y, 0));
-            
-            //We might need the indices later when searching for neighbours
-            int[] pointIndices = new int[3];
-            pointIndices[0] = indices[i] - 1;
-            pointIndices[1] = indices[i + 1] - 1;
-            pointIndices[2] = indices[i + 2] - 1;
-            //Add to our array of faces
-            drawedFaces.Add(new IndexedFace(lr, p1, p2, p3));
+            drawedTriangles.Add(Instantiate(trianglePrefab, activeModel.transform).GetComponent<Triangle>().CreateTriangle(p1,p2,p3));
         }
         //We apply this transformation just to get the object to view
         ApplyTransformation(new Mat4(MatType.identity), projectionMatrix,false);
@@ -52,7 +37,7 @@ public class ModelVisual : MonoBehaviour
         //First we move object to global center 0,0,0
         TranslateToGlobalCenter();
         //Then we Perform transformation
-        foreach (IndexedFace face in drawedFaces)
+        foreach (Triangle face in drawedTriangles)
         {
             Vect4[] points = face.GetCurrentPoints();
             for (int i = 0; i < 3; i++)
@@ -66,7 +51,7 @@ public class ModelVisual : MonoBehaviour
         //Now we move object back to local point
         TranslateToLocalCenter();
         //Transform into view
-        foreach (IndexedFace face in drawedFaces)
+        foreach (Triangle face in drawedTriangles)
         {
             Vect4[] points = face.GetCurrentPoints();
             for (int i = 0; i < 3; i++)
@@ -78,7 +63,8 @@ public class ModelVisual : MonoBehaviour
             //simply display object or animate the transformation
             if (shouldAnimate)
             {
-                face.TweenLines();
+                //TODO ANIMATE
+                face.UpdateLines();
             }
             else
             {
@@ -92,7 +78,7 @@ public class ModelVisual : MonoBehaviour
         {
             Debug.Log("Moving to global center");
             Mat4 translationMatrix = new Mat4(MatType.translation, localCenter.Invert());
-            foreach (IndexedFace face in drawedFaces)
+            foreach (Triangle face in drawedTriangles)
             {
                 //get the local points of one face
                 Vect4[] points = face.GetCurrentPoints();
@@ -117,7 +103,7 @@ public class ModelVisual : MonoBehaviour
         {
             Debug.Log("Moving to local center");
             Mat4 translationMatrix = new Mat4(MatType.translation, localCenter);
-            foreach (IndexedFace face in drawedFaces)
+            foreach (Triangle face in drawedTriangles)
             {
                 //get the local points of one face
                 Vect4[] points = face.GetCurrentPoints();
