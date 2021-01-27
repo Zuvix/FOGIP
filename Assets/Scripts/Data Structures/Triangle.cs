@@ -70,7 +70,7 @@ public class Triangle: MonoBehaviour
             H.Normalize();
             float Is = ks*Mathf.Pow(H.DotProduct(H, normal),h); 
             float I = Ia+Id+Is;
-            mr.material.SetColor("_Color", AppManager.Instance.materialColor * I/3);
+            mr.material.SetColor("_Color", AppManager.Instance.materialColor * I);
         }
     }
 
@@ -89,7 +89,7 @@ public class Triangle: MonoBehaviour
             R.Normalize();
             float Is = ks * Mathf.Pow(R.DotProduct(R, view), h);
             float I = Ia + Id + Is;
-            mr.material.SetColor("_Color", Color.gray * I / 3);
+            mr.material.SetColor("_Color", AppManager.Instance.materialColor * I);
         }
     }
     public void UpdateFinalPoint(int index, Vect4 point)

@@ -27,6 +27,8 @@ public class UiControl : MonoBehaviour
     public TMP_InputField ksTxt;
     public TMP_InputField hTxt;
     public TMP_Dropdown colorSeter;
+
+    public TMP_Text modelName;
     public Vect4 GetTranslationVector()
     {
 
@@ -93,5 +95,19 @@ public class UiControl : MonoBehaviour
         {
             AppManager.Instance.materialColor = Color.green;
         }
+    }
+    public void SwitchLightModel()
+    {
+        if (AppManager.Instance.lightType.Equals("Blinn"))
+        {
+            AppManager.Instance.lightType = "Phong";
+            modelName.text = "Phong model";
+        }
+        else
+        {
+            AppManager.Instance.lightType = "Blinn";
+            modelName.text = "Blinn-Phong";
+        }
+        AppManager.Instance.Redraw();
     }
 }

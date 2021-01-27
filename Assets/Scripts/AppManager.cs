@@ -9,9 +9,9 @@ public class AppManager : Singleton<AppManager>
     private List<Triangle> indexedFaces;
     public ModelVisual modelVisual;
     public UiControl UiControl;
-    public float ka=0.005f;
-    public float kd=0.02f;
-    public float ks=0.08f;
+    public float ka= 0.2f;
+    public float kd=0.4f;
+    public float ks=0.3f;
     public float h=2;
     public Color materialColor = Color.grey;
     public Vect4 light=new Vect4(0,1,0).Normalize();
@@ -25,6 +25,13 @@ public class AppManager : Singleton<AppManager>
 
     public void ResetModel()
     {
+        ka = 0.2f;
+        kd = 0.4f;
+        ks = 0.3f;
+        h = 2;
+        materialColor = Color.grey;
+        light = new Vect4(0, 1, 0).Normalize();
+        lightType = "Blinn";
         modelVisual.ResetLocalCenter();
         modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
 
