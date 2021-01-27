@@ -12,6 +12,7 @@ public class Triangle: MonoBehaviour
     //final meaning after multiplying with projection matrix
     private Vect4[] finalPoints = new Vect4[3];
     private LineRenderer lr;
+    Vect4 normal;
 
     public Triangle CreateTriangle(Vect4 p1, Vect4 p2, Vect4 p3)
     {
@@ -22,41 +23,49 @@ public class Triangle: MonoBehaviour
         this.currentPoints[1] = p2;
         this.currentPoints[2] = p3;
         mesh.vertices = new Vector3[] { p1.Convert(), p2.Convert(), p3.Convert() };
-        mr.material.SetColor("_Color", Color.gray* Random.Range(0, 1f));
         mesh.triangles = new int[] { 0, 1, 2 };
         //BackFaceCulling(finalPoints[0], finalPoints[1],finalPoints[2]);
 
         return this;
     }
     //Display the face on screen
-    public void UpdateLines()
+    public void RedrawTriangle()
     {
         mesh.Clear();
         mesh.vertices = new Vector3[] { new Vector3(finalPoints[0].x, finalPoints[0].y, finalPoints[0].z), new Vector3(finalPoints[1].x, finalPoints[1].y, finalPoints[1].z), new Vector3(finalPoints[2].x, finalPoints[2].y, finalPoints[2].z) };
         mesh.triangles = new int[] { 0, 1, 2 };
         mr.enabled = true;
+        CalculateNormal(finalPoints[0], finalPoints[1], finalPoints[2]);
         BackFaceCulling(finalPoints[0], finalPoints[1],finalPoints[2]);
+        CalculateLight(AppManager.Instance.light, new Vect4(0, 0, -1), AppManager.Instance.ka, AppManager.Instance.kd, AppManager.Instance.ks, AppManager.Instance.h);
     }
-    //Display the face, by slowly animating from last transformation
-    /*public void TweenLines()
+    public void CalculateNormal(Vect4 p1, Vect4 p2, Vect4 p3)
     {
-        DOTween.To(() => lr.GetPosition(0), (x) => lr.SetPosition(0, x), new Vector3(finalPoints[0].x, finalPoints[0].y, 0), 2).Play();
-        DOTween.To(() => lr.GetPosition(3), (x) => lr.SetPosition(3, x), new Vector3(finalPoints[0].x, finalPoints[0].y, 0), 2).Play();
-        DOTween.To(() => lr.GetPosition(1), (x) => lr.SetPosition(1, x), new Vector3(finalPoints[1].x, finalPoints[1].y, 0), 2).Play();
-        DOTween.To(() => lr.GetPosition(2), (x) => lr.SetPosition(2, x), new Vector3(finalPoints[2].x, finalPoints[2].y, 0), 2).Play();
-    }*/
-    //Update point for view
+        normal = p1.CrossProduct(p2.Substraction(p1), p3.Substraction(p1));
+        normal = normal.Normalize();
+    }
     public void BackFaceCulling(Vect4 p1, Vect4 p2,Vect4 p3)
     {
-        Vect4 normal;
-        normal = p1.CrossProduct(p2.Substraction(p1), p3.Substraction(p1));
-        normal=normal.Normalize();
         if (normal.DotProduct(normal, new Vect4(0, 0, 1))>=0)
         {
+            //Dont draw triangle
             mr.enabled = false;
-            Debug.Log(normal.x + "  " + normal.y + "  " + normal.z);
-            Debug.Log(normal.DotProduct(normal, new Vect4(0, 0, 1)));
         } 
+    }
+    public void CalculateLight(Vect4 light, Vect4 view,float ka, float kd, float ks, float h)
+    {
+        //Check if face is visible
+        if (mr.enabled == true)
+        {
+            float Ia = ka * 1;
+            float Id = normal.DotProduct(normal,light);
+            Vect4 H = view.Addition(light);
+            H.Normalize();
+            float Is = Mathf.Pow(H.DotProduct(H, normal),h); 
+            float I = Ia+Id+Is;
+            mr.material.SetColor("_Color", Color.gray * I/3);
+            Debug.Log(I);
+        }
     }
     public void UpdateFinalPoint(int index, Vect4 point)
     {

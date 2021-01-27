@@ -9,31 +9,27 @@ public class AppManager : Singleton<AppManager>
     private List<Triangle> indexedFaces;
     public ModelVisual modelVisual;
     public UiControl UiControl;
-    public Mat4 projectionMatrix;
-    private void Awake()
-    {
-        //Setup projection matrix so we get desired projection
-        projectionMatrix = new Mat4(MatType.identity);
-        // we offset the object to be more in center of screen
-        projectionMatrix.members[3, 0] = -1f;
-    }
-
+    public float ka=0.05f;
+    public float kd=0.2f;
+    public float ks=0.08f;
+    public float h=2;
+    public Vect4 light=new Vect4(0,1,0).Normalize();
     public void UpdateModel(string path, string name)
     {
         FileManager.RetriveModelData(path,out loadedVertices, out loadedIndices);
-        modelVisual.DrawMesh(name, loadedVertices, loadedIndices,projectionMatrix);
+        modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
     }
 
     public void ResetModel()
     {
-        modelVisual.DrawMesh(name, loadedVertices, loadedIndices, projectionMatrix);
+        modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
     }
 
     public void Translate()
     {
         Vect4 translationVector = UiControl.GetTranslationVector();
         Mat4 translationMatrix = new Mat4(MatType.translation, translationVector);
-        modelVisual.ApplyTransformation(translationMatrix,projectionMatrix,true);
+        modelVisual.ApplyTransformation(translationMatrix,true);
         modelVisual.ChangeLocalCenter(translationVector);
     }
 
@@ -41,7 +37,7 @@ public class AppManager : Singleton<AppManager>
     {
         Vect4 scalingVector = UiControl.GetScalingVector();
         Mat4 scalingMatrix = new Mat4(MatType.scale, scalingVector);
-        modelVisual.ApplyTransformation(scalingMatrix, projectionMatrix,true);
+        modelVisual.ApplyTransformation(scalingMatrix,true);
     }
 
     public void Rotate()
@@ -49,13 +45,13 @@ public class AppManager : Singleton<AppManager>
         //We apply rotation one by one starting with X
         Vect4 rotationVector = UiControl.GetRotationVector();
         Mat4 rotxMatrix = new Mat4(MatType.rotx,rotationVector.x);
-        modelVisual.ApplyTransformation(rotxMatrix, projectionMatrix,true);
+        modelVisual.ApplyTransformation(rotxMatrix, true);
 
         Mat4 rotyMatrix = new Mat4(MatType.roty, rotationVector.y);
-        modelVisual.ApplyTransformation(rotyMatrix, projectionMatrix,true);
+        modelVisual.ApplyTransformation(rotyMatrix,true);
 
         Mat4 rotzMatrix = new Mat4(MatType.rotz, rotationVector.z);
-        modelVisual.ApplyTransformation(rotzMatrix, projectionMatrix,true);
+        modelVisual.ApplyTransformation(rotzMatrix,true);
     }
 
 }

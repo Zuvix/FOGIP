@@ -12,7 +12,7 @@ public class ModelVisual : MonoBehaviour
     //we store a list of drawed triangles so we can modify them during runtime
     private List<Triangle> drawedTriangles;
     private Vect4 localCenter=new Vect4(0,0,0);
-    public void DrawMesh(string name,List<Vect4> vertices, List<int> indices,Mat4 projectionMatrix)
+    public void DrawMesh(string name,List<Vect4> vertices, List<int> indices)
     {
         if (activeModel != null)
         {
@@ -29,10 +29,10 @@ public class ModelVisual : MonoBehaviour
             drawedTriangles.Add(Instantiate(trianglePrefab, activeModel.transform).GetComponent<Triangle>().CreateTriangle(p1,p2,p3));
         }
         //We apply this transformation just to get the object to view
-        ApplyTransformation(new Mat4(MatType.identity), projectionMatrix,false);
+        ApplyTransformation(new Mat4(MatType.identity),false);
     }
 
-    public void ApplyTransformation(Mat4 transformationMatrix, Mat4 projectionMatrix, bool shouldAnimate)
+    public void ApplyTransformation(Mat4 transformationMatrix, bool shouldAnimate)
     {
         //First we move object to global center 0,0,0
         TranslateToGlobalCenter();
@@ -56,19 +56,18 @@ public class ModelVisual : MonoBehaviour
             Vect4[] points = face.GetCurrentPoints();
             for (int i = 0; i < 3; i++)
             {
-                //Transform to projection matrix
-                Vect4 FinalPoint = projectionMatrix.Multiply(points[i]);
+                Vect4 FinalPoint = points[i];
                 face.UpdateFinalPoint(i, FinalPoint);
             }
             //simply display object or animate the transformation
             if (shouldAnimate)
             {
                 //TODO ANIMATE
-                face.UpdateLines();
+                face.RedrawTriangle();
             }
             else
             {
-                face.UpdateLines();
+                face.RedrawTriangle();
             }
         }
     }
