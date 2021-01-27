@@ -39,27 +39,22 @@ public class ModelVisual : MonoBehaviour
         //Then we Perform transformation
         foreach (Triangle face in drawedTriangles)
         {
-            Vect4[] points = face.GetCurrentPoints();
+            Vect4[] points = face.GetCurrentVertices();
             for (int i = 0; i < 3; i++)
             {
                 //apply transformation to current point
                 Vect4 CurrentPoint = transformationMatrix.Multiply(points[i]);
                 //update the current point
-                face.UpdateLocalPoint(i, CurrentPoint);
+                face.UpdateVertex(i, CurrentPoint);
             }
         }
         //Now we move object back to local point
         TranslateToLocalCenter();
-        //Transform into view
+        //Draw it <- includes calculating light and backface culling
         foreach (Triangle face in drawedTriangles)
         {
             Vect4[] points = face.GetCurrentPoints();
             for (int i = 0; i < 3; i++)
-            {
-                Vect4 FinalPoint = points[i];
-                face.UpdateFinalPoint(i, FinalPoint);
-            }
-            //simply display object or animate the transformation
             if (shouldAnimate)
             {
                 //TODO ANIMATE
@@ -69,6 +64,8 @@ public class ModelVisual : MonoBehaviour
             {
                 face.RedrawTriangle();
             }
+            //simply display object or animate the transformation
+
         }
     }
     public void TranslateToGlobalCenter()
@@ -79,17 +76,17 @@ public class ModelVisual : MonoBehaviour
             Mat4 translationMatrix = new Mat4(MatType.translation, localCenter.Invert());
             foreach (Triangle face in drawedTriangles)
             {
-                //get the local points of one face
-                Vect4[] points = face.GetCurrentPoints();
+                //get the Vertices 
+                Vect4[] points = face.GetCurrentVertices();
                 for (int i = 0; i < 3; i++)
                 {
                     //move point to globalCenter
 
-                    //apply transformation to current point
+                    //apply transformation to current vertex
                     Vect4 CurrentPoint = translationMatrix.Multiply(points[i]);
 
-                    //update the current point
-                    face.UpdateLocalPoint(i, CurrentPoint);
+                    //update the current vertex
+                    face.UpdateVertex(i, CurrentPoint);
                 }
             }
         }
@@ -104,17 +101,16 @@ public class ModelVisual : MonoBehaviour
             Mat4 translationMatrix = new Mat4(MatType.translation, localCenter);
             foreach (Triangle face in drawedTriangles)
             {
-                //get the local points of one face
-                Vect4[] points = face.GetCurrentPoints();
+                //get the Vertices
+                Vect4[] points = face.GetCurrentVertices();
                 for (int i = 0; i < 3; i++)
                 {
-                    //move point to globalCenter
 
-                    //apply transformation to current point
+                    //apply transformation to current vertex
                     Vect4 CurrentPoint = translationMatrix.Multiply(points[i]);
 
-                    //update the current point
-                    face.UpdateLocalPoint(i, CurrentPoint);
+                    //update the current vertex
+                    face.UpdateVertex(i, CurrentPoint);
                 }
             }
         }

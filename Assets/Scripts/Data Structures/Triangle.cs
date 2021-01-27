@@ -20,11 +20,19 @@ public class Triangle: MonoBehaviour
         this.vertices[2] = p3;
         mesh.vertices = new Vector3[] { p1.Convert(), p2.Convert(), p3.Convert() };
         mesh.triangles = new int[] { 0, 1, 2 };
-        //BackFaceCulling(finalPoints[0], finalPoints[1],finalPoints[2]);
-
+        CalculateNormal(vertices[0], vertices[1], vertices[2]);
+        BackFaceCulling(normal, new Vect4(0, 0, 1));
+        if (IndexedFace.Instance.lightType.Equals("Blinn"))
+        {
+            CalculateBlinnPhongLight(IndexedFace.Instance.light, new Vect4(0, 0, -1), IndexedFace.Instance.ka, IndexedFace.Instance.kd, IndexedFace.Instance.ks, IndexedFace.Instance.h);
+        }
+        else
+        {
+            CalculatePhongLight(IndexedFace.Instance.light, new Vect4(0, 0, -1), IndexedFace.Instance.ka, IndexedFace.Instance.kd, IndexedFace.Instance.ks, IndexedFace.Instance.h);
+        }
         return this;
     }
-    //Display the face on screen
+    //Could be refactored into single method but nvm
     public void RedrawTriangle()
     {
         mesh.Clear();
@@ -88,16 +96,12 @@ public class Triangle: MonoBehaviour
             mr.material.SetColor("_Color", IndexedFace.Instance.materialColor * I);
         }
     }
-    public void UpdateFinalPoint(int index, Vect4 point)
+    public void UpdateVertex(int index, Vect4 point)
     {
         vertices[index] = point;
     }
-    //Update local point
-    public void UpdateLocalPoint(int index, Vect4 point)
-    {
-        vertices[index] = point;
-    }
-    public Vect4[] GetCurrentPoints()
+
+    public Vect4[] GetCurrentVertices()
     {
         return vertices;
     }
