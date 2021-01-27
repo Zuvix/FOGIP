@@ -9,8 +9,8 @@ public class AppManager : Singleton<AppManager>
     private List<Triangle> indexedFaces;
     public ModelVisual modelVisual;
     public UiControl UiControl;
-    public float ka=0.05f;
-    public float kd=0.2f;
+    public float ka=0.005f;
+    public float kd=0.02f;
     public float ks=0.08f;
     public float h=2;
     public Vect4 light=new Vect4(0,1,0).Normalize();
@@ -23,8 +23,12 @@ public class AppManager : Singleton<AppManager>
     public void ResetModel()
     {
         modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
-    }
 
+    }
+    public void Redraw()
+    {
+        modelVisual.RedrawModel();
+    }
     public void Translate()
     {
         Vect4 translationVector = UiControl.GetTranslationVector();

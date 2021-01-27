@@ -123,4 +123,16 @@ public class ModelVisual : MonoBehaviour
     {
         localCenter = localCenter.Addition(translation);
     }
+    public void RedrawModel()
+    {
+        foreach (Triangle face in drawedTriangles)
+        {
+            face.RedrawTriangle();
+        }
+    }
+
+    public void ResetLocalCenter()
+    {
+        localCenter = new Vect4(0, 0, 0);
+    }
 }

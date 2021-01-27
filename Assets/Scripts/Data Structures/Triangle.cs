@@ -58,10 +58,10 @@ public class Triangle: MonoBehaviour
         if (mr.enabled == true)
         {
             float Ia = ka * 1;
-            float Id = normal.DotProduct(normal,light);
+            float Id = kd*normal.DotProduct(normal,light);
             Vect4 H = view.Addition(light);
             H.Normalize();
-            float Is = Mathf.Pow(H.DotProduct(H, normal),h); 
+            float Is = ks*Mathf.Pow(H.DotProduct(H, normal),h); 
             float I = Ia+Id+Is;
             mr.material.SetColor("_Color", Color.gray * I/3);
             Debug.Log(I);

@@ -17,6 +17,14 @@ public class UiControl : MonoBehaviour
     public TMP_InputField ryTxt;
     public TMP_InputField rzTxt;
 
+    public TMP_InputField lxTxt;
+    public TMP_InputField lyTxt;
+    public TMP_InputField lzTxt;
+
+    public TMP_InputField kaTxt;
+    public TMP_InputField kdTxt;
+    public TMP_InputField ksTxt;
+    public TMP_InputField hTxt;
     public Vect4 GetTranslationVector()
     {
 
@@ -35,5 +43,33 @@ public class UiControl : MonoBehaviour
         Vect4 rotationVector = new Vect4(rxTxt.text, ryTxt.text, rzTxt.text);
         return rotationVector;
     }
+    public void SetLightPosition()
+    {
+        AppManager.Instance.light = new Vect4(lxTxt.text, lyTxt.text, lzTxt.text).Normalize();
+        AppManager.Instance.Redraw();
+    }
+    public void SetLightProperties()
+    {
+        if (kaTxt.text.Length > 0)
+            AppManager.Instance.ka = float.Parse(kaTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+        else
+            AppManager.Instance.ka = 0;
 
+        if (kdTxt.text.Length > 0)
+            AppManager.Instance.kd = float.Parse(kdTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+        else
+            AppManager.Instance.kd = 0;
+
+        if (ksTxt.text.Length > 0)
+            AppManager.Instance.ks = float.Parse(ksTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+        else
+            AppManager.Instance.ks = 0;
+
+        if (hTxt.text.Length > 0)
+            AppManager.Instance.h = float.Parse(hTxt.text.Replace(',', '.'), System.Globalization.CultureInfo.InvariantCulture);
+        else
+            AppManager.Instance.h = 0;
+        AppManager.Instance.Redraw();
+
+    }
 }
