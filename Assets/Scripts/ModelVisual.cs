@@ -53,8 +53,6 @@ public class ModelVisual : MonoBehaviour
         //Draw it <- includes calculating light and backface culling
         foreach (Triangle face in drawedTriangles)
         {
-            Vect4[] points = face.GetCurrentPoints();
-            for (int i = 0; i < 3; i++)
             if (shouldAnimate)
             {
                 //TODO ANIMATE
