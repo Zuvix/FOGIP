@@ -13,7 +13,10 @@ public class AppManager : Singleton<AppManager>
     public float kd=0.02f;
     public float ks=0.08f;
     public float h=2;
+    public Color materialColor = Color.grey;
     public Vect4 light=new Vect4(0,1,0).Normalize();
+    public string lightType = "Blinn";
+
     public void UpdateModel(string path, string name)
     {
         FileManager.RetriveModelData(path,out loadedVertices, out loadedIndices);
@@ -22,6 +25,7 @@ public class AppManager : Singleton<AppManager>
 
     public void ResetModel()
     {
+        modelVisual.ResetLocalCenter();
         modelVisual.DrawMesh(name, loadedVertices, loadedIndices);
 
     }

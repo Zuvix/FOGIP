@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UiControl : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class UiControl : MonoBehaviour
     public TMP_InputField kdTxt;
     public TMP_InputField ksTxt;
     public TMP_InputField hTxt;
+    public TMP_Dropdown colorSeter;
     public Vect4 GetTranslationVector()
     {
 
@@ -71,5 +73,25 @@ public class UiControl : MonoBehaviour
             AppManager.Instance.h = 0;
         AppManager.Instance.Redraw();
 
+    }
+     public void ChangeColor()
+    {
+        int val = colorSeter.value;
+        if(val== 0)
+        {
+            AppManager.Instance.materialColor = Color.grey;
+        }
+        if (val == 1)
+        {
+            AppManager.Instance.materialColor = Color.red;
+        }
+        if (val == 2)
+        {
+            AppManager.Instance.materialColor = Color.blue;
+        }
+        if (val == 3)
+        {
+            AppManager.Instance.materialColor = Color.green;
+        }
     }
 }

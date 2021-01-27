@@ -36,23 +36,30 @@ public class Triangle: MonoBehaviour
         mesh.triangles = new int[] { 0, 1, 2 };
         mr.enabled = true;
         CalculateNormal(finalPoints[0], finalPoints[1], finalPoints[2]);
-        BackFaceCulling(finalPoints[0], finalPoints[1],finalPoints[2]);
-        CalculateLight(AppManager.Instance.light, new Vect4(0, 0, -1), AppManager.Instance.ka, AppManager.Instance.kd, AppManager.Instance.ks, AppManager.Instance.h);
+        BackFaceCulling(normal, new Vect4(0, 0, 1));
+        if (AppManager.Instance.lightType.Equals("Blinn"))
+        {
+            CalculateBlinnPhongLight(AppManager.Instance.light, new Vect4(0, 0, -1), AppManager.Instance.ka, AppManager.Instance.kd, AppManager.Instance.ks, AppManager.Instance.h);
+        }
+        else
+        {
+            CalculatePhongLight(AppManager.Instance.light, new Vect4(0, 0, -1), AppManager.Instance.ka, AppManager.Instance.kd, AppManager.Instance.ks, AppManager.Instance.h);
+        }
     }
     public void CalculateNormal(Vect4 p1, Vect4 p2, Vect4 p3)
     {
         normal = p1.CrossProduct(p2.Substraction(p1), p3.Substraction(p1));
         normal = normal.Normalize();
     }
-    public void BackFaceCulling(Vect4 p1, Vect4 p2,Vect4 p3)
+    public void BackFaceCulling(Vect4 normal, Vect4 view)
     {
-        if (normal.DotProduct(normal, new Vect4(0, 0, 1))>=0)
+        if (normal.DotProduct(normal, view)>=0)
         {
             //Dont draw triangle
             mr.enabled = false;
         } 
     }
-    public void CalculateLight(Vect4 light, Vect4 view,float ka, float kd, float ks, float h)
+    public void CalculateBlinnPhongLight(Vect4 light, Vect4 view,float ka, float kd, float ks, float h)
     {
         //Check if face is visible
         if (mr.enabled == true)
@@ -63,8 +70,26 @@ public class Triangle: MonoBehaviour
             H.Normalize();
             float Is = ks*Mathf.Pow(H.DotProduct(H, normal),h); 
             float I = Ia+Id+Is;
-            mr.material.SetColor("_Color", Color.gray * I/3);
-            Debug.Log(I);
+            mr.material.SetColor("_Color", AppManager.Instance.materialColor * I/3);
+        }
+    }
+
+    public void CalculatePhongLight(Vect4 light, Vect4 view, float ka, float kd, float ks, float h)
+    {
+        //Check if face is visible
+        if (mr.enabled == true)
+        {
+            float Ia = ka * 1;
+            float Id = kd * normal.DotProduct(normal, light);
+            //calculate Reflection vector
+            //dot product of Light * normal
+            float dp = light.DotProduct(normal, light) * 2;
+            Vect4 R = new Vect4(normal.x * dp, normal.y * dp, normal.z * dp);
+            R = R.Substraction(light);
+            R.Normalize();
+            float Is = ks * Mathf.Pow(R.DotProduct(R, view), h);
+            float I = Ia + Id + Is;
+            mr.material.SetColor("_Color", Color.gray * I / 3);
         }
     }
     public void UpdateFinalPoint(int index, Vect4 point)
