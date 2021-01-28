@@ -36,7 +36,34 @@ Model after performing Translate, Scale and Rotate Transformations.
 
 ![alt text](https://github.com/Zuvix/Fogip/blob/main/4.PNG?raw=true)
 
+# Stage 3
+In stage 3 we remade the visualisation from wireframe model to filled triangles. In oreder to do that we had to use Unity Mesh component instead of Line renderer. We also had to make a simple Shader to generate a material that won't react to default Unity Engine lighting and with exposed color so we can change it in scripts. Class **Triangle** is used to represent a single triangle mesh with the custom material. The triangle meshes are stored in **IndexedFace** class that is responsible for managing all model data(vertices, indices..). 
+
+Our next task was to implement Backface culling. We added functions to our **Vect4** Class to perform a Vector *dot product*, *cross product* and to *normalize* vector. Now we had all functions needed to do the culling. For each face we:
+1. Calculated the normal normal vector.
+2. Performed dot product of normal vector and camera to polygon vector(same for each polygon, see ortographic projections).
+3. Based on the result of dot product we hide the back faces.
+
+How user sees the displayed mesh:
+
+![alt text](https://github.com/Zuvix/Fogip/blob/main/7.PNG?raw=true)
+
+We see the results of culling if we move camera in the Unity scene view:
+
+![alt text](https://github.com/Zuvix/Fogip/blob/main/6.PNG?raw=true)
+
+The last job we had to do was to implement two lighting models **Blinn-Phong model** and **Phong model**. We use the models to calculate lighting right after the the culling is performed, only for faces that should be visible. This is impemented in two methods: 
+
+![alt text](https://github.com/Zuvix/Fogip/blob/main/8.PNG?raw=true)
+
+Parameters ka,kd,ks,h and color can be changed using the GUI. 
+
+![alt text](https://github.com/Zuvix/Fogip/blob/main/9.PNG?raw=true)
+
+After playing with the parameters we can get the final result like this:
+
+![alt text](https://github.com/Zuvix/Fogip/blob/main/10.PNG?raw=true)
 
 # Download
-There is a zipped file containing the build of an application. Simply download, unzip and run the VisualiseObjects.exe file.
+To test the application we include zip files with builds for stage 2 and 3. Simply unzip the file and run the VisualiseObjects.exe.
 
